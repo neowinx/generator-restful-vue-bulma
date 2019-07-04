@@ -8,7 +8,7 @@
             .field
               .label Email
               .control
-                input.input(type='email' placeholder='Email' :disabled='loginIn' v-model='email' is-focused)
+                input.input(type='input' placeholder='username' :disabled='loginIn' v-model='username' is-focused)
             .field
               .label Password
               .control
@@ -17,14 +17,14 @@
             button.button.is-primary(:class="{'is-loading': loginIn}") Iniciar sesión
 </template>
 <script>
-//import firebase from 'firebase/app';
-//import 'firebase/auth';
+import auth from '@/auth'
+import {HTTP} from '@/http'
 
 export default {
   name: 'login',
   data () {
     return {
-      email: '',
+      username: '',
       password: '',
       errorMessage: null,
       loginIn: false
@@ -32,14 +32,16 @@ export default {
   },
   methods: {
     login () {
-//      this.loginIn = true
-//      firebase.auth().signInWithEmailAndPassword(this.email, this.password).then(() => {
-//        this.$router.push({name: 'home'})
-//      }).catch(error => {
-//        this.errorMessage = error.message
-//      }).finally(() => {
-//        this.loginIn = false
-//      })
+      this.loginIn = true
+      HTTP.post('/jwt/login', { usename: this.username, password: this.password }).then(response => {
+        auth.currentUser = this.username;
+        auth.access_token = response.data.access_token;
+        this.$router.push({name: 'home'})
+      }).catch(error => {
+        this.errorMessage = error.message
+      }).finally(() => {
+        this.loginIn = false
+      })
     }
   }
 }
