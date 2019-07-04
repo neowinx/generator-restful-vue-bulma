@@ -45,6 +45,8 @@ module.exports = class extends Generator {
 		ctpl('package.json');
 		ctpl('README.md');
 		ctpl('public/index.html');
+		ctpl('src/views/Login.vue');
+		ctpl('src/components/Navbar.vue');
   }
 
   install() {

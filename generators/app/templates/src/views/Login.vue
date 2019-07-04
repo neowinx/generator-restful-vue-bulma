@@ -1,12 +1,12 @@
 <template lang="pug">
     section.section.columns.is-centered
       .column.box.is-one-quarter
-          h1.title.is-2.columns.is-centered.is-offset-one-quarter LIPAR S.A.
+          h1.title.is-2.columns.is-centered.is-offset-one-quarter <%=projectNameTitleCase%>
           p
             h2.columns.is-centered.is-offset-one-quarter Iniciar sesion
           form(@submit.prevent="login")
             .field
-              .label Email
+              .label Username
               .control
                 input.input(type='input' placeholder='username' :disabled='loginIn' v-model='username' is-focused)
             .field

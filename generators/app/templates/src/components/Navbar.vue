@@ -5,7 +5,7 @@
       //a.navbar-item(href='https://example.org')
         //img(src='https://bulma.io/images/bulma-logo.png', width='112', height='28')
       a.navbar-item
-        strong LIPAR S.A.
+        strong <%=projectNameTitleCase%>
       a.navbar-burger.burger(role='button', aria-label='menu', aria-expanded='false', data-target='navbarBasicExample' @click='toggleBurger' :class="burgerActive ? 'is-active' : ''")
         span(aria-hidden='true')
         span(aria-hidden='true')
