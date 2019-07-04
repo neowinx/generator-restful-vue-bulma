@@ -33,10 +33,9 @@ export default {
   methods: {
     login () {
       this.loginIn = true
-      HTTP.post('/jwt/login', { usename: this.username, password: this.password }).then(response => {
-        auth.currentUser = this.username;
-        auth.access_token = response.data.access_token;
+      auth.login(this.username, this.password).then(username => {
         this.$router.push({name: 'home'})
+        this.username = username
       }).catch(error => {
         this.errorMessage = error.message
       }).finally(() => {

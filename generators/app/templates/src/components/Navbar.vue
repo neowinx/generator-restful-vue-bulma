@@ -14,12 +14,6 @@
       .navbar-start
         router-link(to="/").navbar-item
           | Inicio
-        router-link(to="/vendedores").navbar-item
-          | Vendedores
-        router-link(to="/cobradores").navbar-item
-          | Cobradores
-        router-link(to="/clientes").navbar-item
-          | Clientes
         router-link(to="/about").navbar-item
           | Acerca de
       .navbar-end
@@ -33,16 +27,14 @@
 </template>
 
 <script>
-//import firebase from 'firebase/app';
-//import 'firebase/auth';
+
+import auth from '@/auth'
 
 export default {
   name: 'navbar',
-//  created: function() {
-//    firebase.auth().onAuthStateChanged(user => {
-//      this.user = user
-//    })
-//  },
+  created: function() {
+    this.user = auth.currentUser
+  },
   data () {
     return {
       user: null,
@@ -50,10 +42,10 @@ export default {
     }
   },
   methods: {
-//    logout () {
-//      firebase.auth().signOut()
-//      this.$router.push({name: 'login'})
-//    },
+    logout () {
+      auth.logout();
+      this.$router.push({name: 'login'})
+    },
     toggleBurger () {
       this.burgerActive = !this.burgerActive
     }
