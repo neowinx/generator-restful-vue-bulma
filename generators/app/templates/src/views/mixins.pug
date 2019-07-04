@@ -1,0 +1,24 @@
+// form fields mixins
+mixin textField(label, model, ref)
+  .field.column
+    label.label= label
+    .control
+      if ref
+        input.input(type='text' placeholder= label ref= ref v-model= model)
+      else
+        input.input(type='text' placeholder= label v-model= model)
+mixin dateField(label, model)
+  .field.column
+    label.label= label
+    .control
+       input.input(type='date' placeholder= label :value= model)
+mixin txtAreaField(label, model)
+  .field.column
+    label.label= label
+    .control
+      textarea.textarea(placeholder= label v-model= model)
+mixin checkboxField(label, model)
+  .field.column
+    .control
+      label.checkbox= label
+        input(type='checkbox' v-model= model)
