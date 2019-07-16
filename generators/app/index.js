@@ -1,22 +1,23 @@
-'use strict';
-const Generator = require('yeoman-generator');
-const chalk = require('chalk');
-const yosay = require('yosay');
-const changeCase = require('change-case');
+"use strict";
+const Generator = require("yeoman-generator");
+const chalk = require("chalk");
+const yosay = require("yosay");
+const changeCase = require("change-case");
 
 module.exports = class extends Generator {
   prompting() {
-
-		this.log(
-      yosay(`Welcome to the ${chalk.red('generator-restful-vue-bulma')} generator!`)
+    this.log(
+      yosay(
+        `Welcome to the ${chalk.red("generator-restful-vue-bulma")} generator!`
+      )
     );
 
     const prompts = [
       {
-        type: 'input',
-        name: 'projectName',
-        message: 'Enter the project name',
-        default: 'My Super Project'
+        type: "input",
+        name: "projectName",
+        message: "Enter the project name",
+        default: "My Super Project"
       }
     ];
 
@@ -26,34 +27,35 @@ module.exports = class extends Generator {
   }
 
   writing() {
-		this.fs.copy(this.templatePath(), this.destinationPath(), {
+    this.fs.copy(this.templatePath(), this.destinationPath(), {
       globOptions: { dot: true }
     });
-		let properties = { 
-			projectName: this.props.projectName,
-			projectNameTitleCase: changeCase.titleCase(this.props.projectName),
-			projectNameSnakeCase: changeCase.snakeCase(this.props.projectName)
-		}
-		let siht = this;
-		function ctpl(tplname) {
-    	siht.fs.copyTpl(
-				siht.templatePath(tplname),
-				siht.destinationPath(tplname),
-				properties
-			);
-		}
-		ctpl('package.json');
-		ctpl('README.md');
-		ctpl('public/index.html');
-		ctpl('src/views/Login.vue');
-		ctpl('src/components/Navbar.vue');
+    let properties = {
+      projectName: this.props.projectName,
+      projectNameTitleCase: changeCase.titleCase(this.props.projectName),
+      projectNameSnakeCase: changeCase.snakeCase(this.props.projectName)
+    };
+    let siht = this;
+    function ctpl(tplname) {
+      siht.fs.copyTpl(
+        siht.templatePath(tplname),
+        siht.destinationPath(tplname),
+        properties
+      );
+    }
+    ctpl("package.json");
+    ctpl("README.md");
+    ctpl("public/index.html");
+    ctpl("src/views/Login.vue");
+    ctpl("src/views/About.vue");
+    ctpl("src/components/Navbar.vue");
   }
 
   install() {
-    if (this.options['skip-install']) {
+    if (this.options["skip-install"]) {
       return;
     }
 
-		this.spawnCommand('npm', ['install']);
+    this.spawnCommand("npm", ["install"]);
   }
 };
