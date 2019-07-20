@@ -73,21 +73,26 @@
 
 import Navbar from '@/components/Navbar.vue'
 import {HTTP} from '@/http'
+import auth from '@/auth'
 
 async function busqueda(search) {
   <%_ if(meta && meta.search) { -%>
   if(search.<%= meta.search %>) 
     query = query.where('<%= meta.search %>', '>=', search.<%= meta.search %>)
   <%_ } -%>
-  let <%= collection %>List = []
+  let response
 
   try {
-    <%= collection %>List = await HTTP.get('/<%= serviceName %>')
+    response = await HTTP.get('/<%= serviceName %>', {
+      headers: {
+        Authorization: `Bearer ${auth.accessToken}`
+      }
+    })
+    return response.data
   } catch (error) {
-    <%= collection %>List = []
     console.log(error)
   }
-  return <%= collection %>List = []
+  return []
 }
 
 export default {

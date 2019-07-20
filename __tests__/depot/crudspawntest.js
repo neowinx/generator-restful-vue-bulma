@@ -50,7 +50,7 @@ ls.stdout.on("data", async data => {
     expectedAnswers++;
   }
   if (
-    data.indexOf("Overwrite src/router.js?") > 0 &&
+    data.indexOf("Overwrite src/") > 0 &&
     expectedAnswers === 4
   ) {
     ls.stdin.write("a\n");
