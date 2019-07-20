@@ -106,5 +106,24 @@ module.exports = class extends Generator {
         )
       );
     }
+
+    if (this.fs.exists(this.destinationPath("src/components/Navbar.vue"))) {
+      var navbar = this.fs.read(
+        this.destinationPath("src/components/Navbar.vue")
+      );
+      let addMenuNavBar = this.fs.read(
+        this.templatePath("add_menu_navbar.ejs")
+      );
+
+      let insertIndex = navbar.indexOf("| Inicio");
+
+      let before = navbar.substring(0, insertIndex + 8);
+      let after = navbar.substring(insertIndex + 9);
+
+      this.fs.write(
+        this.destinationPath("src/components/Navbar.vue"),
+        ejs.render(before + addMenuNavBar + after, templateData)
+      );
+    }
   }
 };

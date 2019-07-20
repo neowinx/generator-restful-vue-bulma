@@ -7,7 +7,7 @@ var expectedAnswers = 0;
 
 // STDOUT events
 ls.stdout.on("data", async data => {
-  console.log(`stdout: ${data}`);
+  console.log(`expectedAnswers: ${expectedAnswers} stdout: ${data}`);
   if (
     data.indexOf(
       "Ingrese la url del servicio RESTful a construir las vistas crud"
@@ -50,13 +50,14 @@ ls.stdout.on("data", async data => {
     expectedAnswers++;
   }
   if (
-    data.indexOf("Overwrite src/router.js? (ynaxdH)") > 0 &&
+    data.indexOf("Overwrite src/router.js?") > 0 &&
     expectedAnswers === 4
   ) {
     ls.stdin.write("a\n");
     expectedAnswers++;
   }
-  if (expectedAnswers >= 4) {
+
+  if (expectedAnswers >= 5) {
     ls.stdin.end();
   }
 });
