@@ -1,55 +1,18 @@
 const { spawn } = require("child_process");
-const rp = require("request-promise");
 
-const ls = spawn("yo", ["restful-vue-bulma:crud"]);
+const ls = spawn("yo", ["restful-vue-bulma"]);
 
 var expectedAnswers = 0;
 
 // STDOUT events
-ls.stdout.on("data", async data => {
+ls.stdout.on("data", data => {
   console.log(`stdout: ${data}`);
-  if (
-    data.indexOf(
-      "Ingrese la url del servicio RESTful a construir las vistas crud"
-    ) > 0 &&
-    expectedAnswers === 0
-  ) {
+  if (data.indexOf("Enter the project name") > 0 && expectedAnswers === 0) {
     ls.stdin.write("\n");
     expectedAnswers++;
   }
-  if (
-    data.indexOf(
-      "El servicio requiere cabecera de autencicación (JWT, Basic, etc.)"
-    ) > 0 &&
-    expectedAnswers === 1
-  ) {
-    ls.stdin.write("\n");
-    expectedAnswers++;
-  }
-  if (
-    data.indexOf("Ingrese la cabecera de autorización del servicio") > 0 &&
-    expectedAnswers === 2
-  ) {
-    let response = await rp({
-      method: "POST",
-      uri: "http://localhost:5000/login",
-      body: {
-        username: "test",
-        password: "test"
-      },
-      json: true
-    });
-    ls.stdin.write(`Bearer ${response.access_token}\n`);
-    expectedAnswers++;
-  }
-  if (
-    data.indexOf("Ingrese el nombre del servicio") > 0 &&
-    expectedAnswers === 3
-  ) {
-    ls.stdin.write("\n");
-    expectedAnswers++;
-  }
-  if (expectedAnswers >= 4) {
+  console.log(`expectedAnswers: ${expectedAnswers}`);
+  if (expectedAnswers >= 1) {
     ls.stdin.end();
   }
 });

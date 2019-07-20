@@ -40,8 +40,7 @@
     "yosay": "^2.0.1"
   },
   "jest": {
-    "testEnvironment": "node",
-    "modulePathIgnorePatterns": ["depot"]
+    "testEnvironment": "node"
   },
   "lint-staged": {
     "*.js": [
