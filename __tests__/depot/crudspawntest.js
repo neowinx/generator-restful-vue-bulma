@@ -49,6 +49,13 @@ ls.stdout.on("data", async data => {
     ls.stdin.write("\n");
     expectedAnswers++;
   }
+  if (
+    data.indexOf("Overwrite src/router.js? (ynaxdH)") > 0 &&
+    expectedAnswers === 4
+  ) {
+    ls.stdin.write("a\n");
+    expectedAnswers++;
+  }
   if (expectedAnswers >= 4) {
     ls.stdin.end();
   }

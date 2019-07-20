@@ -3,6 +3,7 @@ const Generator = require("yeoman-generator");
 const path = require("path");
 const fs = require("fs");
 const rp = require("request-promise");
+const ejs = require("ejs");
 
 const changeCase = require("change-case");
 
@@ -59,24 +60,51 @@ module.exports = class extends Generator {
       });
     }
     let meta;
+
     if (fs.existsSync(`${this.props.serviceName}.meta.json`))
       meta = require(`${this.props.serviceName}.meta.json`);
+
     let thekeys = Array.isArray(thejson)
       ? Object.keys(thejson[0])
       : Object.keys(thejson);
 
+    let templateData = {
+      serviceName: this.props.serviceName,
+      serviceNameTitleCase: changeCase.titleCase(this.props.serviceName),
+      thejson: thejson,
+      meta: meta,
+      changeCase: changeCase,
+      thekeys: thekeys
+    };
     this.fs.copyTpl(
       this.templatePath("View.vue"),
       this.destinationPath(
         "src/views/" + changeCase.titleCase(this.props.serviceName) + ".vue"
       ),
-      {
-        serviceName: this.props.serviceName,
-        thejson: thejson,
-        meta: meta,
-        changeCase: changeCase,
-        thekeys: thekeys
-      }
+      templateData
     );
+
+    if (this.fs.exists(this.destinationPath("src/router.js"))) {
+      var routerJs = this.fs.read(this.destinationPath("src/router.js"));
+      let imports = this.fs.read(this.templatePath("imports_router.ejs"));
+      let jsonRoute = this.fs.read(this.templatePath("json_route_router.ejs"));
+
+      let routerindex = routerJs.indexOf("routes: [");
+
+      if (routerindex === -1) {
+        throw new Error("No router definition found in router.js");
+      }
+
+      let routerJsBefore = routerJs.substring(0, routerindex + 9);
+      let routerJsAfter = routerJs.substring(routerindex + 10);
+
+      this.fs.write(
+        this.destinationPath("src/router.js"),
+        ejs.render(
+          imports + routerJsBefore + jsonRoute + routerJsAfter,
+          templateData
+        )
+      );
+    }
   }
 };
