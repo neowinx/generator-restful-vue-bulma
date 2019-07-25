@@ -62,7 +62,10 @@ module.exports = class extends Generator {
     let meta;
 
     if (fs.existsSync(`${this.props.serviceName}.meta.json`))
-      meta = require(`${this.props.serviceName}.meta.json`);
+      meta = require(path.join(
+        process.cwd(),
+        `${this.props.serviceName}.meta.json`
+      ));
 
     let thekeys = Array.isArray(thejson)
       ? Object.keys(thejson[0])

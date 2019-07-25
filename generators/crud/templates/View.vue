@@ -12,7 +12,11 @@
         form(@submit.prevent='searchAction').level-left
           .level-item
             <%_ if( !(meta && meta.no_list && meta.no_list.includes(meta.search)) ) { -%>
+              <%_ if(meta && meta.titles && meta.titles[meta.search]) { -%>
             input.input(placeholder='<%= meta.titles[meta.search] %>' v-model='search.<%=meta.search%>')
+              <%_ } else { -%>
+            input.input(placeholder='<%=changeCase.titleCase(meta.search)%>' v-model='search.<%=meta.search%>')
+              <%_ } -%>
             <%_ } else { -%>
             input.input(placeholder='<%=changeCase.titleCase(meta.search)%>' v-model='search.<%=meta.search%>')
             <%_ } -%>
@@ -76,13 +80,12 @@ import {HTTP} from '@/http'
 import auth from '@/auth'
 
 async function busqueda(search) {
-  <%_ if(meta && meta.search) { -%>
-  if(search.<%= meta.search %>) 
-    query = query.where('<%= meta.search %>', '>=', search.<%= meta.search %>)
-  <%_ } -%>
   let response
 
   try {
+  <%_ if(meta && meta.search) { -%>
+    response = await HTTP.post('/search/<%= serviceName %>', search, {
+  <%_ } -%>
     response = await HTTP.get('/<%= serviceName %>', {
       headers: {
         Authorization: `Bearer ${auth.accessToken}`
@@ -99,7 +102,7 @@ export default {
   data () {
     return {
       <%= collection %>List: [],
-      <%= collection %>Instance: {}, 
+      <%= collection %>Instance: {},
       search: {
       <%_ if(meta && meta.search) { -%>
         <%= meta.search %>: null,
