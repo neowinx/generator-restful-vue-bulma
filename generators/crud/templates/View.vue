@@ -85,8 +85,9 @@ async function busqueda(search) {
   try {
   <%_ if(meta && meta.search) { -%>
     response = await HTTP.post('/search/<%= serviceName %>', search, {
-  <%_ } -%>
+  <%_ } else { -%>
     response = await HTTP.get('/<%= serviceName %>', {
+  <%_ } -%>
       headers: {
         Authorization: `Bearer ${auth.accessToken}`
       }

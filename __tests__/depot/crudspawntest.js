@@ -1,5 +1,11 @@
 const { spawn } = require("child_process");
 const rp = require("request-promise");
+const fs = require("fs");
+const path = require("path");
+
+// Always replace the user.meta.json
+const jsonMetaPath = path.join(process.cwd(), "user.meta.json");
+fs.copyFileSync(path.join(__dirname, "user.meta.json"), jsonMetaPath);
 
 const ls = spawn("yo", ["restful-vue-bulma:crud"]);
 
@@ -49,10 +55,7 @@ ls.stdout.on("data", async data => {
     ls.stdin.write("\n");
     expectedAnswers++;
   }
-  if (
-    data.indexOf("Overwrite src/") > 0 &&
-    expectedAnswers === 4
-  ) {
+  if (data.indexOf("Overwrite src/") > 0 && expectedAnswers === 4) {
     ls.stdin.write("a\n");
     expectedAnswers++;
   }
