@@ -80,7 +80,7 @@ module.exports = class extends Generator {
       thekeys: thekeys
     };
     this.fs.copyTpl(
-      this.templatePath("View.vue"),
+      this.templatePath("View.vue.ejs"),
       this.destinationPath(
         "src/views/" + changeCase.titleCase(this.props.serviceName) + ".vue"
       ),
