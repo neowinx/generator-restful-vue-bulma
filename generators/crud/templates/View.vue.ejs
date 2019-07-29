@@ -22,6 +22,8 @@
             <%_ } -%>
           .level-item
             button.button.is-primary(:class="{'is-loading': searching}") Buscar
+        .level-right
+          button.button.is-link(@click.prevent='agregar') Agregar
       <%_ } -%>
       progress.progress.is-small.is-primary(v-if='searching' max='100') 50
 
@@ -137,6 +139,11 @@ export default {
         this.<%= collection %>List = list
         this.searching = false
       })
+    },
+    agregar: function () {
+      this.userInstance = {}
+      this.showDetail = true
+      this.$nextTick(() => this.$refs.idInput.focus())
     },
     verDatos: function (instance) {
       this.<%= collection %>Instance = instance
