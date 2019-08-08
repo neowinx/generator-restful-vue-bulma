@@ -8,7 +8,7 @@ module.exports = class extends Generator {
   prompting() {
     this.log(
       yosay(
-        `Welcome to the ${chalk.red("generator-restful-vue-bulma")} generator!`
+        `Welcome to the ${chalk.red("restful-vue-bulma")} generator!`
       )
     );
 
