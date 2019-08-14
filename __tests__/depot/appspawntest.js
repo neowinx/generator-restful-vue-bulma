@@ -1,7 +1,13 @@
 const { spawn } = require("child_process");
 
-const ls = spawn("yo", ["restful-vue-bulma"]);
+let ls;
 
+if (/^win/.test(process.platform)) {
+  ls = spawn("cmd", ["/s", "/c", "yo", "restful-vue-bulma", "--skip-install"]);
+} else {
+  // Linux
+  ls = spawn("yo", ["restful-vue-bulma", "--skip-install"]);
+}
 var expectedAnswers = 0;
 
 // STDOUT events
