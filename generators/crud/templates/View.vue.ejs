@@ -8,7 +8,7 @@ _%>
     include mixins.pug
 
     Navbar
-    .section.list(v-if='!showDetail')
+    .section.list(v-if='status === "list"')
       .subtitle <%= changeCase.titleCase(serviceName) %>
       <%_ if(meta && meta.search) { -%>
       .level.panel
@@ -26,7 +26,7 @@ _%>
           .level-item
             button.button.is-primary(:class="{'is-loading': searching}") Buscar
         .level-right
-          button.button.is-link(@click.prevent='agregar') Agregar
+          button.button.is-link(@click.prevent='add') Agregar
       <%_ } -%>
       progress.progress.is-small.is-primary(v-if='searching' max='100') 50
 
@@ -55,9 +55,9 @@ _%>
           <%_ } -%>
         <%_ }) -%>
             td.has-text-centered
-              button.button.is-primary(@click.prevent='editar(row)') Datos
+              button.button.is-primary(@click.prevent='edit(row)') Editar
 
-    .section.detail(v-else @keyup.esc='showDetail = false')
+    .section.detail(v-else @keyup.esc='status = "list"')
       h1.title Detalles de <%= serviceName %>
         form.form
         <%_ edit_fields.forEach(function(e, index) { -%>
@@ -76,7 +76,11 @@ _%>
             <%_ } -%>
           <%_ } -%>
         <%_ }) -%>
-          button.button.is-info(@click.prevent='showDetail = false') Volver
+          .level.panel
+            .level-left
+              button.button.level-item.is-primary(v-if='status === "add"' @click.prevent='save') Guardar
+              button.button.level-item.is-primary(v-if='status === "edit"' @click.prevent='update') Actualizar
+              button.button.level-item.is-info(@click.prevent='status = "list"') Volver
 
 </template>
 
@@ -91,14 +95,10 @@ async function busqueda(search) {
 
   try {
   <%_ if(meta && meta.search) { -%>
-    response = await HTTP.post('/search/<%= serviceName %>', search, {
+    response = await HTTP.post('/search/<%= serviceName %>', search)
   <%_ } else { -%>
-    response = await HTTP.get('/<%= serviceName %>', {
+    response = await HTTP.get('/<%= serviceName %>')
   <%_ } -%>
-      headers: {
-        Authorization: `Bearer ${auth.accessToken}`
-      }
-    })
     return response.data
   } catch (error) {
     console.log(error)
@@ -117,7 +117,7 @@ export default {
       <%_ } -%>
       },
       searching: false,
-      showDetail: false
+      status: 'list'
     }
   },
   filters: {
@@ -145,19 +145,25 @@ export default {
         this.searching = false
       })
     },
-    agregar: function () {
+    add: function () {
+      this.status = 'add'
       this.userInstance = {}
-      this.showDetail = true
       <%_ if(edit_fields && edit_fields.length > 0) { -%>
       this.$nextTick(() => this.$refs.<%= edit_fields[0] %>Input.focus())
       <%_ } -%>
     },
-    editar: function (instance) {
+    edit: function (instance) {
+      this.status = 'edit'
       this.<%= collection %>Instance = instance
-      this.showDetail = true
       <%_ if(edit_fields && edit_fields.length > 0) { -%>
       this.$nextTick(() => this.$refs.<%= edit_fields[0] %>Input.focus())
       <%_ } -%>
+    },
+    update: function(instance) {
+
+    },
+    save: function (instance) {
+
     }
   }
 }

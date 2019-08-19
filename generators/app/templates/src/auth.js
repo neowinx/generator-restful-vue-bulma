@@ -7,6 +7,7 @@ const auth = {
     return HTTP.post('/login', { username: username, password: password }).then(response => {
       this.currentUser = username;
       this.accessToken = response.data.access_token;
+      HTTP.defaults.headers.common.Authorization = `Bearer ${auth.accessToken}`
       return username
     }).catch(error => {
       if(error && error.response) {
