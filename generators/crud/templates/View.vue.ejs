@@ -78,8 +78,8 @@ _%>
         <%_ }) -%>
           .level.panel
             .level-left
-              button.button.level-item.is-primary(v-if='status === "add"' @click.prevent='save') Guardar
-              button.button.level-item.is-primary(v-if='status === "edit"' @click.prevent='update') Actualizar
+              button.button.level-item.is-primary(v-if='status === "add"' @click.prevent='save(userInstance)') Guardar
+              button.button.level-item.is-primary(v-if='status === "edit"' @click.prevent='update(userInstance)') Actualizar
               button.button.level-item.is-info(@click.prevent='status = "list"') Volver
 
 </template>
@@ -87,8 +87,8 @@ _%>
 <script>
 
 import Navbar from '@/components/Navbar.vue'
+import CrudBase from '@/components/CrudBase.vue'
 import {HTTP} from '@/http'
-import auth from '@/auth'
 
 async function busqueda(search) {
   let response
@@ -107,6 +107,7 @@ async function busqueda(search) {
 }
 
 export default {
+  extends: CrudBase,
   data () {
     return {
       <%= collection %>List: [],
@@ -118,13 +119,6 @@ export default {
       },
       searching: false,
       status: 'list'
-    }
-  },
-  filters: {
-    dateFmt(date) {
-      if (date)
-        return date.split('T')[0]
-      return date
     }
   },
   components: {
@@ -160,10 +154,10 @@ export default {
       <%_ } -%>
     },
     update: function(instance) {
-
+      this._put(`/user/${instance.id}`, instance)
     },
     save: function (instance) {
-
+      this._post('/user', instance, res => this.userList.push(res.data))
     }
   }
 }

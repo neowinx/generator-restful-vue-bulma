@@ -2,10 +2,13 @@ import {HTTP} from '@/http'
 
 const auth = {
   currentUser: undefined,
+  //TODO: Store this in the access_token and use it from there
+  challenge: undefined,
   accessToken: undefined,
   login(username, password) {
     return HTTP.post('/login', { username: username, password: password }).then(response => {
       this.currentUser = username;
+      this.challenge = password;
       this.accessToken = response.data.access_token;
       HTTP.defaults.headers.common.Authorization = `Bearer ${auth.accessToken}`
       return username
