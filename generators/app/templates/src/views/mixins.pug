@@ -1,12 +1,9 @@
 // form fields mixins
-mixin textField(label, model, ref)
+mixin textField(label, model, ref, maxLength)
   .field.column
     label.label= label
     .control
-      if ref
-        input.input(type='text' placeholder= label ref= ref v-model= model)
-      else
-        input.input(type='text' placeholder= label v-model= model)
+      input.input(type='text' placeholder= label maxlength= maxLength ref= ref v-model= model)
 mixin numberField(label, model, ref)
   .field.column
     label.label= label
