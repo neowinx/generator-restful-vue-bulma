@@ -7,6 +7,14 @@ mixin textField(label, model, ref)
         input.input(type='text' placeholder= label ref= ref v-model= model)
       else
         input.input(type='text' placeholder= label v-model= model)
+mixin numberField(label, model, ref)
+  .field.column
+    label.label= label
+    .control
+      if ref
+        input.input(type='number' placeholder= label ref= ref v-model= model)
+      else
+        input.input(type='number' placeholder= label v-model= model)
 mixin dateField(label, model)
   .field.column
     label.label= label

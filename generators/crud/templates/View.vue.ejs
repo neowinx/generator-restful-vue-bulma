@@ -71,6 +71,8 @@ _%>
             <%_ var fieldTitle = meta && meta.titles && meta.titles[e] ? meta.titles[e] : changeCase.titleCase(e) -%>
             <%_ if(typeof thejson[0][e] === 'boolean') { -%>
               +checkboxField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>')
+            <%_ } else if(typeof thejson[0][e] === 'number') { -%>
+              +numberField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_ if(index == 0) { _%>, '<%=e%>Input'<%_ } -%>)
             <%_ } else { -%>
               +textField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_ if(index == 0) { _%>, '<%=e%>Input'<%_ } -%>)
             <%_ } -%>
