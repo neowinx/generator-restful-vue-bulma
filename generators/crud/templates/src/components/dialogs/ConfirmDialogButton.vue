@@ -1,6 +1,6 @@
 <template lang="pug">
   .confirm-dialog
-    button.button(:class='[ btnCls ? btnCls : "is-primary" ]' :disabled='disabled' @click.prevent='active = true') {{ buttonTitle }}
+    button.button(:class='[ buttonClass ? buttonClass : "is-primary" ]' :disabled='disabled' @click.prevent='active = true') {{ buttonTitle }}
     .modal(:class='{ "is-active": active }')
       .modal-background
       .modal-card
@@ -9,7 +9,7 @@
         section.modal-card-body
           p {{ message }}
         footer.modal-card-foot
-          button.button(:class='[ btnCls ? btnCls : "is-primary" ]' @click.prevent='confirm') Confirmar
+          button.button(:class='[ buttonClass ? buttonClass : "is-primary" ]' @click.prevent='confirm') Confirmar
           button.button.is-info(@click.prevent='close') Cerrar
 </template>
 
@@ -24,7 +24,7 @@ export default {
   props: {
     title: null,
     buttonTitle: null,
-    btnCls: null,
+    buttonClass: null,
     message: null,
     disabled: false
   },

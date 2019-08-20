@@ -82,8 +82,9 @@ _%>
               button.button.level-item.is-primary(v-if='status === "edit"' @click.prevent='update(<%= collection %>Instance)') Actualizar
               button.button.level-item.is-info(@click.prevent='status = "list"') Volver
             .level-right
-              confirm-dialog-button(v-if='status === "edit"' button-title='Borrar' btnCls='is-danger' title="¿Borrar el registro?"
-                message='¿Está seguro que desea borrar el registro?' @confirmed='remove(<%= collection %>Instance)')
+              confirm-dialog-button(v-if='status === "edit"' button-title='Borrar' button-class='is-danger'
+                title="¿Borrar el registro?" message='¿Está seguro que desea borrar el registro?'
+                @confirmed='remove(<%= collection %>Instance)')
 
 </template>
 
