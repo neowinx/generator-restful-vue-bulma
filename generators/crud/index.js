@@ -79,6 +79,9 @@ module.exports = class extends Generator {
       changeCase: changeCase,
       thekeys: thekeys
     };
+
+    this.fs.copy(`${this.templatePath()}/src`, `${this.destinationPath()}/src`);
+
     this.fs.copyTpl(
       this.templatePath("View.vue.ejs"),
       this.destinationPath(
