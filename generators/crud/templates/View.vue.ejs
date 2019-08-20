@@ -78,9 +78,12 @@ _%>
         <%_ }) -%>
           .level.panel
             .level-left
-              button.button.level-item.is-primary(v-if='status === "add"' @click.prevent='save(userInstance)') Guardar
-              button.button.level-item.is-primary(v-if='status === "edit"' @click.prevent='update(userInstance)') Actualizar
+              button.button.level-item.is-primary(v-if='status === "add"' @click.prevent='save(<%= collection %>Instance)') Guardar
+              button.button.level-item.is-primary(v-if='status === "edit"' @click.prevent='update(<%= collection %>Instance)') Actualizar
               button.button.level-item.is-info(@click.prevent='status = "list"') Volver
+            .level-right
+              confirm-dialog-button(v-if='status === "edit"' button-title='Borrar' btnCls='is-danger' title="¿Borrar el registro?"
+                message='¿Está seguro que desea borrar el registro?' @confirmed='remove(<%= collection %>Instance)')
 
 </template>
 
@@ -88,23 +91,8 @@ _%>
 
 import Navbar from '@/components/Navbar.vue'
 import CrudBase from '@/components/CrudBase.vue'
+import ConfirmDialogButton from '@/components/dialogs/ConfirmDialogButton.vue'
 import {HTTP} from '@/http'
-
-async function busqueda(search) {
-  let response
-
-  try {
-  <%_ if(meta && meta.search) { -%>
-    response = await HTTP.post('/search/<%= serviceName %>', search)
-  <%_ } else { -%>
-    response = await HTTP.get('/<%= serviceName %>')
-  <%_ } -%>
-    return response.data
-  } catch (error) {
-    console.log(error)
-  }
-  return []
-}
 
 export default {
   extends: CrudBase,
@@ -122,26 +110,30 @@ export default {
     }
   },
   components: {
-    Navbar
+    Navbar, ConfirmDialogButton
   },
   created: function() {
-    this.searching = true
-    busqueda(this.search).then(list => {
-      this.<%= collection %>List = list
-      this.searching = false
-    })
+    this.searchAction()
   },
   methods: {
-    searchAction: function () {
+    searchAction: async function () {
       this.searching = true
-      busqueda(this.search).then(list => {
-        this.<%= collection %>List = list
+      try {
+          <%_ if(meta && meta.search) { -%>
+        this.<%= collection %>List = (await HTTP.post('/search/<%= serviceName %>', this.search)).data
+          <%_ } else { -%>
+        this.<%= collection %>List = (await HTTP.get('/<%= serviceName %>')).data
+          <%_ } -%>
+      } catch (error) {
+        console.log(error)
+        this.<%= collection %>List = []
+      } finally {
         this.searching = false
-      })
+      }
     },
     add: function () {
       this.status = 'add'
-      this.userInstance = {}
+      this.<%= collection%>Instance = {}
       <%_ if(edit_fields && edit_fields.length > 0) { -%>
       this.$nextTick(() => this.$refs.<%= edit_fields[0] %>Input.focus())
       <%_ } -%>
@@ -154,10 +146,13 @@ export default {
       <%_ } -%>
     },
     update: function(instance) {
-      this._put(`/user/${instance.id}`, instance)
+      this._put(`/<%= collection%>/${instance.id}`, instance)
     },
     save: function (instance) {
-      this._post('/user', instance, res => this.userList.push(res.data))
+      this._post('/<%= collection %>', instance, res => this.<%= collection %>List.push(res.data))
+    },
+    remove: function (instance) {
+      this._delete(`/<%= collection %>/${instance.id}`, () => this.searchAction())
     }
   }
 }
