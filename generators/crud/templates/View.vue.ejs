@@ -1,5 +1,6 @@
 <%_
   let collection = serviceName
+  let firstItem = isPaginated ? thejson[itemsName][0] : thejson[0]
   let edit_fields = thekeys.filter(e => !(meta && meta.no_edit && meta.no_edit.includes(e)))
 _%>
 <template lang="pug">
@@ -47,7 +48,7 @@ _%>
           tr
         <%_ thekeys.forEach(function(e) { -%>
           <%_ if( !(meta && meta.no_list && meta.no_list.includes(e)) ) { -%>
-            <%_ if(typeof thejson[0][e] === 'boolean') { -%>
+            <%_ if(typeof firstItem[e] === 'boolean') { -%>
             td {{ row.<%= e %> ? 'Si' : 'No' }}
             <%_ } else { -%>
             td {{ row.<%= e %> }}
@@ -56,6 +57,8 @@ _%>
         <%_ }) -%>
             td.has-text-centered
               button.button.is-primary(@click.prevent='edit(row)') Editar
+
+      PaginationView(v-if='pagination' :page="pagination.page" :pages="pagination.pages" @selected="searchAction")
 
     .section.detail(v-else @keyup.esc='status = "list"')
       h1.title Detalles de <%= serviceName %>
@@ -69,9 +72,9 @@ _%>
           <%_ } -%>
           <%_ if( !(meta && meta.no_edit && meta.no_edit.includes(e)) ) { -%>
             <%_ var fieldTitle = meta && meta.titles && meta.titles[e] ? meta.titles[e] : changeCase.titleCase(e) -%>
-            <%_ if(typeof thejson[0][e] === 'boolean') { -%>
+            <%_ if(typeof firstItem[e] === 'boolean') { -%>
               +checkboxField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>')
-            <%_ } else if(typeof thejson[0][e] === 'number') { -%>
+            <%_ } else if(typeof firstItem[e] === 'number') { -%>
               +numberField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_ if(index == 0) { _%>, '<%=e%>Input'<%_ } -%>)
             <%_ } else { -%>
               +textField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_ if(index == 0) { _%>, '<%=e%>Input'<%_ } -%>)
@@ -95,6 +98,7 @@ _%>
 import Navbar from '@/components/Navbar.vue'
 import CrudBase from '@/components/CrudBase.vue'
 import ConfirmDialogButton from '@/components/dialogs/ConfirmDialogButton.vue'
+import PaginationView from '@/components/PaginationView.vue'
 import {HTTP} from '@/http'
 
 export default {
@@ -108,28 +112,44 @@ export default {
         <%= meta.search %>: null,
       <%_ } -%>
       },
+      pagination: null,
       searching: false,
       status: 'list'
     }
   },
   components: {
+    PaginationView,
     Navbar, ConfirmDialogButton
   },
   created: function() {
     this.searchAction()
   },
   methods: {
-    searchAction: async function () {
+    searchAction: async function (page) {
       this.searching = true
       try {
           <%_ if(meta && meta.search) { -%>
-        this.<%= collection %>List = (await HTTP.post('/search/<%= serviceName %>', this.search)).data
+        let results = (await HTTP.post('/search/<%= serviceName %>', this.search, {
+          params: {
+            page: page ? page : null
+          }
+        })).data
           <%_ } else { -%>
-        this.<%= collection %>List = (await HTTP.get('/<%= serviceName %>')).data
+        let results = (await HTTP.get('/<%= serviceName %>', {
+          params: {
+            page: page ? page : null
+          }
+        })).data
           <%_ } -%>
+        this.pagination = {
+          page: results.page,
+          pages: results.pages
+        }
+        this.<%= collection %>List = results.items
       } catch (error) {
         console.log(error)
         this.<%= collection %>List = []
+        this.pagination = null
       } finally {
         this.searching = false
       }

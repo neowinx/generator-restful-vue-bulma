@@ -19,6 +19,21 @@ module.exports = class extends Generator {
       },
       {
         type: "confirm",
+        name: "isPaginated",
+        message: "¿El servicio devuelve items paginados?",
+        default: true
+      },
+      {
+        type: "input",
+        name: "itemsName",
+        message: "Ingrese el nombre del atributo json que contiene los items",
+        default: "items",
+        when: function(answers) {
+          return answers.isPaginated;
+        }
+      },
+      {
+        type: "confirm",
         name: "authRequired",
         message:
           "El servicio requiere cabecera de autencicación (JWT, Basic, etc.)",
@@ -67,12 +82,20 @@ module.exports = class extends Generator {
         `${this.props.serviceName}.meta.json`
       ));
 
-    let thekeys = Array.isArray(thejson)
-      ? Object.keys(thejson[0])
-      : Object.keys(thejson);
+    let thekeys;
+
+    if (this.props.isPaginated) {
+      thekeys = Object.keys(thejson[this.props.itemsName][0]);
+    } else {
+      thekeys = Array.isArray(thejson)
+        ? Object.keys(thejson[0])
+        : Object.keys(thejson);
+    }
 
     let templateData = {
       serviceName: this.props.serviceName,
+      isPaginated: this.props.isPaginated,
+      itemsName: this.props.itemsName,
       serviceNameTitleCase: changeCase.titleCase(this.props.serviceName),
       thejson: thejson,
       meta: meta,
