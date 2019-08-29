@@ -1,8 +1,28 @@
 <template lang="pug">
-  nav.pagination(v-if='pages > 1' role='navigation' aria-label='pagination')
-    ul.pagination-list(v-if='pages > 5')
+
+  nav.pagination(v-if='pages < 7' role='navigation' aria-label='pagination')
+    ul.pagination-list
+      li(v-for='n in pages')
+        a.pagination-link(@click.prevent='selected(n)' :class="{'is-current': page === n}") {{n}}
+
+  nav.pagination(v-else-if='pages >= 7' role='navigation' aria-label='pagination')
+    ul.pagination-list(v-if='page - 7 < 0')
+      li(v-for='n in 7')
+        a.pagination-link(@click.prevent='selected(n)' :class="{'is-current': page === n}") {{n}}
       li
-        a.pagination-link(@click.prevent='selected(n)') 1
+        span.pagination-ellipsis &hellip;
+      li
+        a.pagination-link(@click.prevent='selected(pages)') {{pages}}
+    ul.pagination-list(v-else-if='page + 6 > pages')
+      li
+        a.pagination-link(@click.prevent='selected(1)') 1
+      li
+        span.pagination-ellipsis &hellip;
+      li(v-for='n in reverseKeys(7)')
+        a.pagination-link(@click.prevent='selected(pages - n)' :class="{'is-current': page === pages - n}") {{pages - n}}
+    ul.pagination-list(v-else)
+      li
+        a.pagination-link(@click.prevent='selected(1)') 1
       li
         span.pagination-ellipsis &hellip;
       li
@@ -15,10 +35,6 @@
         span.pagination-ellipsis &hellip;
       li
         a.pagination-link(@click.prevent='selected(pages)') {{pages}}
-    ul.pagination-list(v-else)
-      li(v-for='n in pages')
-        a.pagination-link.is-current(v-if='n === page' :aria-label="`Page ${n}`" aria-current="page") {{n}}
-        a.pagination-link(v-else :aria-label="`Goto page ${n}`" @click.prevent='selected(n)') {{n}}
 </template>
 
 <script>
@@ -29,6 +45,9 @@
       page: null
     },
     methods: {
+      reverseKeys(n) {
+        return [...Array(n).keys()].slice().reverse()
+      },
       selected: function (n) {
         this.$emit('selected', n)
       }
