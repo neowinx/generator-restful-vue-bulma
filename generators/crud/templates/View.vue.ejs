@@ -15,15 +15,17 @@ _%>
       .level.panel
         form(@submit.prevent='searchAction').level-left
           .level-item
-            <%_ if( !(meta && meta.no_list && meta.no_list.includes(meta.search)) ) { -%>
-              <%_ if(meta && meta.titles && meta.titles[meta.search]) { -%>
-            input.input(placeholder='<%= meta.titles[meta.search] %>' v-model='search.<%=meta.search%>')
+        <%_meta.search.forEach(function(searchField) {-%>
+            <%_ if( !(meta && meta.no_list && meta.no_list.includes(searchField)) ) { -%>
+              <%_ if(meta && meta.titles && meta.titles[searchField]) { -%>
+            input.input(placeholder='<%= meta.titles[searchField] %>' v-model='search.<%=searchField%>')
               <%_ } else { -%>
-            input.input(placeholder='<%=changeCase.titleCase(meta.search)%>' v-model='search.<%=meta.search%>')
+            input.input(placeholder='<%=changeCase.titleCase(searchField)%>' v-model='search.<%=searchField%>')
               <%_ } -%>
             <%_ } else { -%>
-            input.input(placeholder='<%=changeCase.titleCase(meta.search)%>' v-model='search.<%=meta.search%>')
+            input.input(placeholder='<%=changeCase.titleCase(searchField)%>' v-model='search.<%=searchField%>')
             <%_ } -%>
+        <%_})-%>
           .level-item
             button.button.is-primary(:class="{'is-loading': searching}") Buscar
         .level-right
@@ -122,7 +124,9 @@ export default {
       <%= collection %>Instance: {},
       search: {
       <%_ if(meta && meta.search) { -%>
-        <%= meta.search %>: null,
+        <%_meta.search.forEach(function(searchField) {-%>
+        <%= searchField %>: null,
+        <%_})-%>
       <%_ } -%>
       },
       pagination: null,

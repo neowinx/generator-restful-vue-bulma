@@ -1,5 +1,5 @@
 {
-  "search": "user",
+  "search": [ "user" ],
   "no_list": [ "id" ],
   "no_edit": [ "id" ],
   "max_length": {
