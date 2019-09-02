@@ -2,7 +2,8 @@
   let collection = serviceName;
   let firstItem = isPaginated ? thejson[itemsName][0] : thejson[0];
   let edit_fields = thekeys.filter(e => !(meta && meta.no_edit && meta.no_edit.includes(e)));
-  let title = meta && meta.mainTitle ? meta.mainTitle : serviceNameTitleCase;
+  let title = meta && meta.main_title ? meta.main_title : serviceNameTitleCase;
+  let edit_columns = meta && meta.edit_columns ? meta.edit_columns : 2;
 _%>
 <template lang="pug">
 .<%= serviceName %>
@@ -70,7 +71,7 @@ _%>
           <%_ if(index == 0) { -%>
           .columns
           <%_ } -%>
-          <%_ if(index > 0 && index % 2 == 0) { -%>
+          <%_ if(index > 0 && index % edit_columns == 0) { -%>
           .columns
           <%_ } -%>
           <%_ if( !(meta && meta.no_edit && meta.no_edit.includes(e)) ) { -%>
