@@ -1,7 +1,8 @@
 <%_
-  let collection = serviceName
-  let firstItem = isPaginated ? thejson[itemsName][0] : thejson[0]
-  let edit_fields = thekeys.filter(e => !(meta && meta.no_edit && meta.no_edit.includes(e)))
+  let collection = serviceName;
+  let firstItem = isPaginated ? thejson[itemsName][0] : thejson[0];
+  let edit_fields = thekeys.filter(e => !(meta && meta.no_edit && meta.no_edit.includes(e)));
+  let title = meta && meta.mainTitle ? meta.mainTitle : serviceNameTitleCase;
 _%>
 <template lang="pug">
 .<%= serviceName %>
@@ -10,7 +11,7 @@ _%>
 
     Navbar
     .section.list(v-if='status === "list"')
-      .subtitle <%= changeCase.titleCase(serviceName) %>
+      .subtitle <%= title %>
       <%_ if(meta && meta.search) { -%>
       .level.panel
         form(@submit.prevent='searchAction').level-left
@@ -63,7 +64,7 @@ _%>
       PaginationView(v-if='pagination' :page="pagination.page" :pages="pagination.pages" @selected="searchAction")
 
     .section.detail(v-else @keyup.esc='status = "list"')
-      h1.title Detalles de <%= serviceName %>
+      h1.title Detalles de <%= title %>
         form.form
         <%_ edit_fields.forEach(function(e, index) { -%>
           <%_ if(index == 0) { -%>

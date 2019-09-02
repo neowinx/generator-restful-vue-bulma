@@ -97,6 +97,7 @@ module.exports = class extends Generator {
       isPaginated: this.props.isPaginated,
       itemsName: this.props.itemsName,
       serviceNameTitleCase: changeCase.titleCase(this.props.serviceName),
+      serviceNamePascalCase: changeCase.pascalCase(this.props.serviceName),
       thejson: thejson,
       meta: meta,
       changeCase: changeCase,
@@ -108,7 +109,7 @@ module.exports = class extends Generator {
     this.fs.copyTpl(
       this.templatePath("View.vue.ejs"),
       this.destinationPath(
-        "src/views/" + changeCase.titleCase(this.props.serviceName) + ".vue"
+        "src/views/" + changeCase.pascalCase(this.props.serviceName) + ".vue"
       ),
       templateData
     );

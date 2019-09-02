@@ -1,3 +1,6 @@
+<%_
+  let title = meta && meta.mainTitle ? meta.mainTitle : serviceNameTitleCase
+-%>
 
         router-link(to="/<%=serviceName%>").navbar-item
-          | <%=serviceNameTitleCase%>
+          | <%=title%>
