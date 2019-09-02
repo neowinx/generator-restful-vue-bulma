@@ -1,5 +1,6 @@
 <script>
 import {HTTP} from '@/http'
+import accounting from 'accounting-js'
 
 export default {
   filters: {
@@ -7,6 +8,17 @@ export default {
       if (date)
         return date.split('T')[0]
       return date
+    },
+    currencyFmt(number) {
+      if (number)
+        return accounting.formatMoney(number, {
+          symbol: 'Gs.',
+          thousand: '.',
+          format: `%s %v`,
+          decimal: ',',
+          precision: 0
+        })
+      return number
     }
   },
   methods: {

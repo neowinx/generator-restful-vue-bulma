@@ -54,6 +54,12 @@ _%>
           <%_ if( !(meta && meta.no_list && meta.no_list.includes(e)) ) { -%>
             <%_ if(typeof firstItem[e] === 'boolean') { -%>
             td {{ row.<%= e %> ? 'Si' : 'No' }}
+            <%_ } else if(typeof firstItem[e] === 'number') { -%>
+              <%_if(meta && meta.currency_fields && meta.currency_fields.includes(e)) {-%>
+            td {{ row.<%= e %> | currencyFmt }}
+              <%_ } else { -%>
+            td {{ row.<%= e %> }}
+              <%_ } -%>
             <%_ } else { -%>
             td {{ row.<%= e %> }}
             <%_ } -%>
@@ -86,13 +92,19 @@ _%>
                 } else if (meta.max_length && meta.max_length[field]) {
                 _%>, null, <%=meta.max_length[field]%><%_
                 }
+              } else if (index == 0) {
+              _%>, '<%=e%>Input'<%_
               }
             }
             -%>
             <%_ if(typeof firstItem[e] === 'boolean') { -%>
               +checkboxField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>')
             <%_ } else if(typeof firstItem[e] === 'number') { -%>
+              <%_if(meta && meta.currency_fields && meta.currency_fields.includes(e)) {-%>
+              +currencyField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
+              <%_ } else { -%>
               +numberField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
+              <%_ } -%>
             <%_ } else { -%>
               +textField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
             <%_ } -%>
