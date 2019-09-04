@@ -1,6 +1,6 @@
 <template lang="pug">
 
-  nav.pagination(v-if='pages < 7' role='navigation' aria-label='pagination')
+  nav.pagination(v-if='pages > 1 && pages < 7' role='navigation' aria-label='pagination')
     ul.pagination-list
       li(v-for='n in pages')
         a.pagination-link(@click.prevent='selected(n)' :class="{'is-current': page === n}") {{n}}
