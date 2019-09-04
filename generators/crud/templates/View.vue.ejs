@@ -61,7 +61,11 @@ _%>
             td {{ row.<%= e %> }}
               <%_ } -%>
             <%_ } else { -%>
+              <%_if(meta && meta.date_fields && meta.date_fields.includes(e)) {-%>
+            td {{ row.<%= e %>  | dateFmt }}
+              <%_ } else { -%>
             td {{ row.<%= e %> }}
+              <%_ } -%>
             <%_ } -%>
           <%_ } -%>
         <%_ }) -%>
@@ -106,7 +110,11 @@ _%>
               +numberField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
               <%_ } -%>
             <%_ } else { -%>
+              <%_if(meta && meta.date_fields && meta.date_fields.includes(e)) {-%>
+              +dateField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
+              <%_ } else { -%>
               +textField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
+              <%_ } -%>
             <%_ } -%>
           <%_ } -%>
         <%_ }) -%>
