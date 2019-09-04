@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Login from './views/Login.vue'
 import auth from './auth'
+import constants from "./constants";
 
 Vue.use(Router)
 
@@ -30,8 +31,8 @@ const router = new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  if(!auth.currentUser && !['/login', '/about'].includes(to.path) ) {
-    next('/login')
+  if(!auth.currentUser && ![constants.AUTH_URL, '/about'].includes(to.path) ) {
+    next(constants.AUTH_URL)
   } else {
     next()
   }

@@ -1,15 +1,18 @@
 import {HTTP} from '@/http'
+import constants from "./constants";
 
 const auth = {
   currentUser: undefined,
   //TODO: Store this in the access_token and use it from there
   challenge: undefined,
   accessToken: undefined,
+  payload: undefined,
   login(username, password) {
-    return HTTP.post('/login', { username: username, password: password }).then(response => {
+    return HTTP.post(constants.AUTH_URL, { username: username, password: password }).then(response => {
       this.currentUser = username;
       this.challenge = password;
       this.accessToken = response.data.access_token;
+      this.payload = JSON.parse(atob(auth.accessToken.split('.')[1]));
       HTTP.defaults.headers.common.Authorization = `Bearer ${auth.accessToken}`
       return username
     }).catch(error => {
@@ -35,6 +38,7 @@ const auth = {
   logout() {
     this.currentUser = undefined
     this.accessToken = undefined
+    this.payload = undefined
   }
 }
 
