@@ -1,4 +1,5 @@
 "use strict";
+const utils = require('../utils');
 const Generator = require("yeoman-generator");
 const path = require("path");
 const fs = require("fs");
@@ -154,6 +155,18 @@ module.exports = class extends Generator {
         this.destinationPath("src/components/Navbar.vue"),
         ejs.render(before + addMenuNavBar + after, templateData)
       );
+    }
+
+    if (this.fs.exists(this.destinationPath("package.json"))) {
+      var packageJson = this.fs.read(this.destinationPath("package.json"));
+      if (packageJson.indexOf('"vue-multiselect": ') === -1) {
+        packageJson = utils.insertAfter(
+          packageJson,
+          '"vue-router": "^3.0.3"',
+          ',\n    "vue-multiselect": "2.1.6"'
+        );
+        this.fs.write(this.destinationPath("package.json"), packageJson);
+      }
     }
   }
 };
