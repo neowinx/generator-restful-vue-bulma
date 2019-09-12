@@ -1,17 +1,4 @@
 // form fields mixins
-mixin textField(label, model, ref, maxLength)
-  .field.column
-    label.label= label
-    .control
-      input.input(type='text' placeholder= label maxlength= maxLength ref= ref v-model= model)
-mixin numberField(label, model, ref)
-  .field.column
-    label.label= label
-    .control
-      if ref
-        input.input(type='number' placeholder= label ref= ref v-model= model)
-      else
-        input.input(type='number' placeholder= label v-model= model)
 mixin currencyField(label, model, ref)
   .field.column
     label.label= label

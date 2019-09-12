@@ -87,7 +87,7 @@ _%>
         <%_ if( !(meta && meta.no_edit && meta.no_edit.includes(e)) ) { -%>
           <%_ var fieldTitle = meta && meta.titles && meta.titles[e] ? meta.titles[e] : changeCase.titleCase(e) -%>
           <%_
-          function lastParams(field, index) {
+          function lastParamsPug(field, index) {
             if(meta && meta.max_length) {
               if(index == 0 && meta.max_length[field]) {
               _%>, '<%=e%>Input', <%=meta.max_length[field]%><%_
@@ -100,20 +100,28 @@ _%>
             _%>, '<%=e%>Input'<%_
             }
           }
+          function lastParams(field, index) {
+            if (index == 0) {
+            -%> ref='<%=e%>Input'<%_
+            }
+            if (meta.max_length && meta.max_length[field]) {
+            -%> maxLength='<%=meta.max_length[field]%>'<%_
+            }
+          }
           -%>
           <%_ if(typeof firstItem[e] === 'boolean') { -%>
             +checkboxField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>')
           <%_ } else if(typeof firstItem[e] === 'number') { -%>
             <%_if(meta && meta.currency_fields && meta.currency_fields.includes(e)) {-%>
-            +currencyField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
+            +currencyField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParamsPug(e, index)-%>)
             <%_ } else { -%>
-            +numberField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
+            NumberField(label='<%= fieldTitle %>' v-model='<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
             <%_ } -%>
           <%_ } else { -%>
             <%_if(meta && meta.date_fields && meta.date_fields.includes(e)) {-%>
-            +dateField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
+            +dateField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParamsPug(e, index)-%>)
             <%_ } else { -%>
-            +textField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
+            TextField(label='<%= fieldTitle %>' v-model='<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
             <%_ } -%>
           <%_ } -%>
         <%_ } -%>
@@ -137,6 +145,9 @@ import CrudBase from '@/components/CrudBase.vue'
 import ConfirmDialogButton from '@/components/dialogs/ConfirmDialogButton.vue'
 import PaginationView from '@/components/PaginationView.vue'
 import {HTTP} from '@/http'
+import TextField from "../components/TextField";
+import InputField from "../components/InputField";
+import NumberField from "../components/NumberField";
 
 export default {
   extends: CrudBase,
@@ -157,6 +168,7 @@ export default {
     }
   },
   components: {
+    TextField, InputField, NumberField,
     PaginationView,
     Navbar, ConfirmDialogButton
   },

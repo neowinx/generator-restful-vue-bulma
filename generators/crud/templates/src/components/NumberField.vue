@@ -2,10 +2,10 @@
   import InputField from "../components/InputField";
 
   export default {
-    name: "TextField",
+    name: "NumberField",
     extends: InputField,
     props: {
-      type: 'text'
+      type: 'number'
     }
   }
 </script>
