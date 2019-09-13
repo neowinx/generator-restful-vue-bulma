@@ -2,12 +2,12 @@
   import InputField from "../components/InputField";
 
   export default {
-    name: "TextField",
+    name: "DateField",
     extends: InputField,
     props: {
       type: {
         type: String,
-        default: 'text'
+        default: 'date'
       }
     }
   }

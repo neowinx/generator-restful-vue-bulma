@@ -15,8 +15,8 @@
       value: null,
     },
     methods: {
-      changed(newvalue) {
-        this.$emit('input', newvalue)
+      changed(event) {
+        this.$emit('input', event.target.value)
       },
       focus() {
         this.$refs.txtinput.focus();

@@ -1,28 +1,14 @@
-<template lang="pug">
-  .field.column
-    label.label {{ label }}
-    .control
-      input.input(type='password' ref='passinput' :placeholder='label' :value='value' @input='changed')
-</template>
-
 <script>
+  import InputField from "../components/InputField";
+
   export default {
     name: "PasswordField",
+    extends: InputField,
     props: {
-      label: String,
-      value: null
-    },
-    methods: {
-      selected(newvalue) {
-        this.$emit('input', newvalue)
-      },
-      focus() {
-        this.$refs.passinput.focus();
+      type: {
+        type: String,
+        default: 'password'
       }
     }
   }
 </script>
-
-<style scoped>
-
-</style>

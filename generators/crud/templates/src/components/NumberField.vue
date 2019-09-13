@@ -5,7 +5,10 @@
     name: "NumberField",
     extends: InputField,
     props: {
-      type: 'number'
+      type: {
+        type: String,
+        default: 'number'
+      }
     }
   }
 </script>
