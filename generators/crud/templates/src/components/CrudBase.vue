@@ -3,6 +3,11 @@ import {HTTP} from '@/http'
 import accounting from 'accounting-js'
 
 export default {
+  data() {
+    return {
+      loading: false,
+    }
+  },
   filters: {
     dateFmt(date) {
       if (date)
@@ -32,6 +37,7 @@ export default {
       this._request(url, 'delete', undefined, callback)
     },
     _request(url, method, instance, callback) {
+      this.loading = true;
       HTTP.request({
         method: method,
         url: url,
@@ -39,8 +45,10 @@ export default {
       }).then(res => {
         if(callback) callback(res)
         this.status = 'list'
+        this.loading = false;
       }).catch(error => {
         console.log(error)
+        this.loading = false;
       })
     }
   }

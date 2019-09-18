@@ -166,7 +166,27 @@ module.exports = class extends Generator {
           ',\n    "vue-multiselect": "2.1.6"'
         );
         this.fs.write(this.destinationPath("package.json"), packageJson);
+        this.options.packageJsonModified = true;
       }
+      if (packageJson.indexOf('"v-calendar": ') === -1) {
+        packageJson = utils.insertAfter(
+          packageJson,
+          '"vue-router": "^3.0.3"',
+          ',\n    "v-calendar": "^1.0.0-beta.16"'
+        );
+        this.fs.write(this.destinationPath("package.json"), packageJson);
+        this.options.packageJsonModified = true;
+      }
+    }
+  }
+
+  install() {
+    if (this.options["skip-install"]) {
+      return;
+    }
+
+    if (this.options.packageJsonModified) {
+      this.spawnCommand("npm", ["install"]);
     }
   }
 };

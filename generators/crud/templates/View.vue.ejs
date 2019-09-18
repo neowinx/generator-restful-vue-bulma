@@ -102,9 +102,9 @@ _%>
           }
           function lastParams(field, index) {
             if (index == 0) {
-            -%> ref='<%=e%>Input'<%_
+            -%> ref='<%=field%>Input'<%_
             }
-            if (meta.max_length && meta.max_length[field]) {
+            if (meta && meta.max_length && meta.max_length[field]) {
             -%> maxLength='<%=meta.max_length[field]%>'<%_
             }
           }
@@ -113,13 +113,13 @@ _%>
             +checkboxField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>')
           <%_ } else if(typeof firstItem[e] === 'number') { -%>
             <%_if(meta && meta.currency_fields && meta.currency_fields.includes(e)) {-%>
-            +currencyField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParamsPug(e, index)-%>)
+            CurrencyField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParamsPug(e, index)-%>)
             <%_ } else { -%>
             NumberField(label='<%= fieldTitle %>' v-model='<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
             <%_ } -%>
           <%_ } else { -%>
             <%_if(meta && meta.date_fields && meta.date_fields.includes(e)) {-%>
-            +dateField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParamsPug(e, index)-%>)
+            DateField(label='<%= fieldTitle %>' v-model='<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
             <%_ } else { -%>
             TextField(label='<%= fieldTitle %>' v-model='<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
             <%_ } -%>

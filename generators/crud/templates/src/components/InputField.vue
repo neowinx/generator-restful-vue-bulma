@@ -2,7 +2,7 @@
   .field.column
     label.label {{ label }}
     .control
-      input.input(:type='type' ref='txtinput' :placeholder='label' :maxlength='maxLength' :value='value' @input='changed')
+      input.input(:type='type' ref='txtinput' :placeholder='label' :maxlength='maxLength' :value='value' @input='changed' :disabled="disabled")
 </template>
 
 <script>
@@ -13,6 +13,7 @@
       type: String,
       maxLength: Number,
       value: null,
+      disabled: null
     },
     methods: {
       changed(event) {

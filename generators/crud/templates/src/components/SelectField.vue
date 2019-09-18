@@ -9,9 +9,10 @@
         :multiple="multiple"
         :close-on-select="!multiple"
         :allow-empty="multiple"
-        :searchable='multiple'
+        :searchable='searchable ? searchable : multiple'
         :show-labels="multiple"
         :label='label'
+        :custom-label='cutomLabel'
         :track-by='trackBy'
         placeholder="Seleccione un valor")
 </template>
@@ -25,6 +26,7 @@
     props: {
       inputLabel: String,
       label: String,
+      cutomLabel: Function,
       trackBy: String,
       path: String,
       value: null,
@@ -32,7 +34,8 @@
         type: Boolean,
         default: false
       },
-      options: Array
+      options: Array,
+      searchable: Boolean
     },
     data: function () {
       return {
