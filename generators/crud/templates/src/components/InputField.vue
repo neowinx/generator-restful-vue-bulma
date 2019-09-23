@@ -1,8 +1,11 @@
 <template lang="pug">
   .field.column
-    label.label {{ label }}
+    label.label
+      span(v-if="required" style="color: red; margin-right: .25em") *
+      | {{ label }}
     .control
-      input.input(:type='type' ref='txtinput' :placeholder='label' :maxlength='maxLength' :value='value' @input='changed' :disabled="disabled")
+      input.input(:type='type' ref='txtinput' :placeholder='label' :maxlength='maxLength'
+        :value='value' @input='changed' :disabled="disabled")
 </template>
 
 <script>
@@ -13,7 +16,8 @@
       type: String,
       maxLength: Number,
       value: null,
-      disabled: null
+      disabled: null,
+      required: Boolean
     },
     methods: {
       changed(event) {

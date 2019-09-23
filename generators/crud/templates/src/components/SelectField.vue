@@ -1,6 +1,8 @@
 <template lang="pug">
   .field.column
-    label.label {{ inputLabel }}
+    label.label
+      span(v-if="required" style="color: red; margin-right: .25em") *
+      | {{ inputLabel }}
     .control
       multiselect(
         :value="value"
@@ -12,7 +14,7 @@
         :searchable='searchable ? searchable : multiple'
         :show-labels="multiple"
         :label='label'
-        :custom-label='cutomLabel'
+        :custom-label='customLabel'
         :track-by='trackBy'
         placeholder="Seleccione un valor")
 </template>
@@ -26,7 +28,7 @@
     props: {
       inputLabel: String,
       label: String,
-      cutomLabel: Function,
+      customLabel: Function,
       trackBy: String,
       path: String,
       value: null,
@@ -35,7 +37,8 @@
         default: false
       },
       options: Array,
-      searchable: Boolean
+      searchable: Boolean,
+      required: Boolean
     },
     data: function () {
       return {
