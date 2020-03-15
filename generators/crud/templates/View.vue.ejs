@@ -30,9 +30,9 @@ _%>
         <%_})-%>
           .level-item
             button.button.is-primary(:class="{'is-loading': searching}") Buscar
+      <%_ } -%>
         .level-right
           button.button.is-link(@click.prevent='add') Agregar
-      <%_ } -%>
       progress.progress.is-small.is-primary(v-if='searching' max='100') 50
 
       table.table.is-bordered.is-striped.is-fullwidth.is-hoverable
