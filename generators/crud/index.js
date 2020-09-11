@@ -115,8 +115,19 @@ module.exports = class extends Generator {
       templateData
     );
 
-    if (this.fs.exists(this.destinationPath("src/router.js"))) {
-      var routerJs = this.fs.read(this.destinationPath("src/router.js"));
+    let dis = this;
+
+    function modifyDestFile(filename, withThis) {
+      if (dis.fs.exists(dis.destinationPath(filename))) {
+        var fileString = dis.fs.read(dis.destinationPath(filename));
+        let newFileString = withThis(fileString);
+        if (newFileString) {
+          dis.fs.write(dis.destinationPath(filename), newFileString);
+        }
+      }
+    }
+
+    modifyDestFile("src/router.js", (routerJs) => {
       let imports = this.fs.read(this.templatePath("imports_router.ejs"));
       let jsonRoute = this.fs.read(this.templatePath("json_route_router.ejs"));
 
@@ -129,19 +140,13 @@ module.exports = class extends Generator {
       let routerJsBefore = routerJs.substring(0, routerindex + 9);
       let routerJsAfter = routerJs.substring(routerindex + 10);
 
-      this.fs.write(
-        this.destinationPath("src/router.js"),
-        ejs.render(
-          imports + routerJsBefore + jsonRoute + routerJsAfter,
-          templateData
-        )
+      return ejs.render(
+        imports + routerJsBefore + jsonRoute + routerJsAfter,
+        templateData
       );
-    }
+    });
 
-    if (this.fs.exists(this.destinationPath("src/components/Navbar.vue"))) {
-      var navbar = this.fs.read(
-        this.destinationPath("src/components/Navbar.vue")
-      );
+    modifyDestFile("src/components/Navbar.vue", navbar => {
       let addMenuNavBar = this.fs.read(
         this.templatePath("add_menu_navbar.ejs")
       );
@@ -151,33 +156,64 @@ module.exports = class extends Generator {
       let before = navbar.substring(0, insertIndex + 8);
       let after = navbar.substring(insertIndex + 9);
 
-      this.fs.write(
-        this.destinationPath("src/components/Navbar.vue"),
-        ejs.render(before + addMenuNavBar + after, templateData)
-      );
-    }
+      return ejs.render(before + addMenuNavBar + after, templateData);
+    });
 
-    if (this.fs.exists(this.destinationPath("package.json"))) {
-      var packageJson = this.fs.read(this.destinationPath("package.json"));
-      if (packageJson.indexOf('"vue-multiselect": ') === -1) {
-        packageJson = utils.insertAfter(
-          packageJson,
-          '"vue-router": "^3.0.3"',
-          ',\n    "vue-multiselect": "2.1.6"'
-        );
-        this.fs.write(this.destinationPath("package.json"), packageJson);
-        this.options.packageJsonModified = true;
+    modifyDestFile("src/main.js", mainJs => {
+      var newMainJs = mainJs;
+      
+      function addToMainJs(after, what, ifnot) {
+        if (newMainJs.indexOf(ifnot ? ifnot : what) === -1) {
+          newMainJs = utils.insertAfter(newMainJs, after, what);
+        }
       }
-      if (packageJson.indexOf('"v-calendar": ') === -1) {
-        packageJson = utils.insertAfter(
-          packageJson,
-          '"vue-router": "^3.0.3"',
-          ',\n    "v-calendar": "^1.0.0-beta.16"'
-        );
-        this.fs.write(this.destinationPath("package.json"), packageJson);
-        this.options.packageJsonModified = true;
+      
+      addToMainJs("import router from './router'",
+         "\nimport { library } from '@fortawesome/fontawesome-svg-core'\n" +
+         "import { faFileUpload, faUserSecret, faKey, faTasks, faSearch, faEdit, faPrint } from '@fortawesome/free-solid-svg-icons'\n" +
+         "import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'",
+         "from '@fortawesome/fontawesome-svg-core'");
+
+      addToMainJs("import router from './router'",
+         "\n\nimport VCalendar from 'v-calendar'");
+      
+      addToMainJs("Vue.config.productionTip = false",
+         "\n\nVue.use(VCalendar)");
+
+      addToMainJs("Vue.config.productionTip = false",
+         "\n\nVue.component('font-awesome-icon', FontAwesomeIcon)");
+
+      addToMainJs("Vue.config.productionTip = false",
+         "\n\nlibrary.add(faFileUpload, faUserSecret, faKey, faTasks, faSearch, faEdit, faPrint)");
+
+      return newMainJs;
+    });
+
+    modifyDestFile("package.json", packageJson => {
+      var newPackageJson = packageJson;
+
+      function addPackage(name, version) {
+        if (newPackageJson.indexOf(`"${name}": `) === -1) {
+          newPackageJson = utils.insertAfter(
+            newPackageJson,
+            '"vue-router": "^3.0.3"',
+            `,\n    "${name}": "${version}"`
+          );
+          dis.options.packageJsonModified = true;
+        }
       }
-    }
+
+      addPackage("vue-multiselect", "2.1.6");
+      addPackage("v-calendar", "^1.0.0-beta.16");
+      addPackage("@fortawesome/fontawesome-svg-core", "^1.2.30");
+      addPackage("@fortawesome/free-solid-svg-icons", "^5.14.0");
+      addPackage("@fortawesome/vue-fontawesome", "^2.0.0");
+
+      if (dis.options.packageJsonModified) {
+        return newPackageJson;
+      }
+    }); 
+
   }
 
   install() {
