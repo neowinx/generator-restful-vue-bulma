@@ -8,8 +8,6 @@ _%>
 <template lang="pug">
 .<%= serviceName %>
 
-    include mixins.pug
-
     Navbar
     .section.list(v-if='status === "list"')
       .subtitle <%= title %>
