@@ -108,7 +108,7 @@ _%>
           }
           -%>
           <%_ if(typeof firstItem[e] === 'boolean') { -%>
-            +checkboxField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>')
+            CheckField(label='<%= fieldTitle %>' v-model='<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
           <%_ } else if(typeof firstItem[e] === 'number') { -%>
             <%_if(meta && meta.currency_fields && meta.currency_fields.includes(e)) {-%>
             CurrencyField('<%= fieldTitle %>', '<%= collection %>Instance.<%=e%>'<%_lastParamsPug(e, index)-%>)
