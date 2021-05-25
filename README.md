@@ -16,6 +16,111 @@ Then generate your new project:
 yo restful-vue-bulma
 ```
 
+## CRUD sub-generator
+
+As yeoman generators can include sub-generators to scaffold specific parts of an application project, the restful-vue-bulma generator has a sub-generator called _crud_ that generates CRUD views.
+
+#### Usage:
+
+```bash
+yo restful-vue-bulma:crud
+```
+
+This sub-generator takes a service endpoint to generate all views and code required for crud operations, based on JSON attributes of items returned in the service response.
+
+Therefore, the crud sub-generator requires the following information:
+
+- The endpoint URL of a RESTful Service. i.e. http://localhost:5000/user
+
+- The attribute name of items list if the response is a paginated result.
+
+- Authentication info if it's required.
+
+- A service's name for code and files generated.
+
+  
+
+It is worth mentioning that code customization can be achieved through config files related to each service endpoint. These files, called internally as **meta json**, contain configurations that modify how code is generated, such as what fields are available to edit or how data is displayed based on the data type. 
+
+Each meta json config file has to be named as _serviceName_.meta.json and located in the same directory where the sub-generator is executed; this way, the sub-generator will recognize them and apply the changes. 
+
+The list of available options for customization are:
+
+- **no_list**(*array*): list of attribute names that determined if a data column related to an attribute name is generated or not.
+- **no_edit**(*array*):  list of attribute names that determined if a field, related to an attribute name, is included or not in create/update forms.
+- **search**(*array*): list of attribute names used to generate search fields.
+- **currency_fields**(*array*):  list of attribute names that contain currency values. Used to generate Currency Fields and apply a Currency format.
+- **date_fields**(*array*): list of attribute names that contain date values. Used to generate Date Fields and apply a Date format. 
+- **image_fields**(*array*): list of attribute names that contain image values. Used to generate Image Upload Fields.
+- **titles**(*dict*): dictionary used to customize the text of table headers and field labels. The key is an attribute name and the value es the custom text.
+- **max_length**(*dict*): dictionary used to set the max length of characters that a field can contain. The key is an attribute name and the value es the max length.
+- **main_title**(*string*): custom text used as the main title for views.
+- **edit_columns**(*number*): number of columns considered in the layout of create/update forms.
+
+
+
+## Example of meta json config file:
+
+***Service response:*** 
+
+```json
+{
+  "page": 1,
+  "pages": 1,
+  "items": [
+    {
+      "id": 1,
+      "product_name": "product 1",
+      "product_origin": "origin 1",
+      "product_desc": "desc 1",
+      "product_cost": 1000.5,
+      "shipping_date": "2021-05-25T00:00:00",
+      "stock": 10
+    },
+
+  ]
+}
+```
+
+
+
+***Service meta json:***
+
+```json
+{
+  "edit_columns": 4,
+  "no_list": [
+    "id"
+  ],
+  "no_edit": [
+    "id",
+    "shipping_date"
+  ],
+  "currency_fields": [
+    "product_cost"
+  ],
+  "date_fields": [
+    "shipping_date"
+  ],
+  "search": [
+    "product_name",
+    "product_origin"
+  ],
+  "titles": {
+    "product_name": "Product Name",
+    "product_origin": "Origin",
+    "product_desc": "Product Desc",
+    "shipping_date": "Ship. Date"
+  },
+  "max_length": {
+    "product_name": 50,
+    "product_origin": 10
+  },
+  "main_title": "Products"
+}
+```
+
+
 ## Getting To Know Yeoman
 
  * Yeoman has a heart of gold.
