@@ -128,6 +128,12 @@ module.exports = class extends Generator {
     }
 
     modifyDestFile("src/router.js", (routerJs) => {
+
+      //check router.js content to avoid duplicate entries
+      if(utils.wordInText(templateData.serviceNamePascalCase, routerJs)){
+        return;
+      }
+
       let imports = this.fs.read(this.templatePath("imports_router.ejs"));
       let jsonRoute = this.fs.read(this.templatePath("json_route_router.ejs"));
 
@@ -147,6 +153,12 @@ module.exports = class extends Generator {
     });
 
     modifyDestFile("src/components/Navbar.vue", navbar => {
+
+      //check navbar content to avoid duplicate entries
+      if(utils.wordInText(templateData.serviceNamePascalCase, navbar)){
+        return;
+      }
+      
       let addMenuNavBar = this.fs.read(
         this.templatePath("add_menu_navbar.ejs")
       );
