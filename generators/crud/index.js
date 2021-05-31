@@ -52,6 +52,12 @@ module.exports = class extends Generator {
         message:
           "Ingrese el nombre del servicio (basado en el mismo se generaran los nombres de las vistas)",
         default: "user"
+      },
+      {
+        type: "input",
+        name: "metaJsonPath",
+        message:
+          "Ingrese la ubicación del archivo de configuración (ej. generator/user.meta.json)"
       }
     ];
 
@@ -77,12 +83,14 @@ module.exports = class extends Generator {
     }
     let meta;
 
-    if (fs.existsSync(`${this.props.serviceName}.meta.json`))
-      meta = require(path.join(
-        process.cwd(),
-        `${this.props.serviceName}.meta.json`
-      ));
-
+    if (fs.existsSync(this.props.metaJsonPath)){
+      if(path.isAbsolute(this.props.metaJsonPath)){
+        meta = require(this.props.metaJsonPath);
+      }else{
+        meta = require(path.join(process.cwd(),this.props.metaJsonPath));
+      }
+    }
+      
     let thekeys;
 
     if (this.props.isPaginated) {
