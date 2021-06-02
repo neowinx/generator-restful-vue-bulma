@@ -57,7 +57,7 @@ module.exports = class extends Generator {
         type: "input",
         name: "metaJsonPath",
         message:
-          "Ingrese la ubicación del archivo de configuración (ej. generator/user.meta.json)"
+          "Ingrese la ubicación del archivo de configuración opcional (ej. generator/user.meta.json)"
       }
     ];
 
@@ -81,8 +81,11 @@ module.exports = class extends Generator {
         json: true
       });
     }
-    let meta;
 
+    let meta;
+    if(!this.props.metaJsonPath){
+      this.props.metaJsonPath = `${this.props.serviceName}.meta.json`;
+    }
     if (fs.existsSync(this.props.metaJsonPath)){
       if(path.isAbsolute(this.props.metaJsonPath)){
         meta = require(this.props.metaJsonPath);
