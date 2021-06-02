@@ -204,7 +204,7 @@ module.exports = class extends Generator {
       }
 
       addPackage("vue-multiselect", "2.1.6");
-      addPackage("v-calendar", "^1.0.0-beta.16");
+      addPackage("v-calendar", "^2.3.0");
       addPackage("@fortawesome/fontawesome-svg-core", "^1.2.30");
       addPackage("@fortawesome/free-solid-svg-icons", "^5.14.0");
       addPackage("@fortawesome/vue-fontawesome", "^2.0.0");
