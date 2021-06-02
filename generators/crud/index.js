@@ -155,7 +155,7 @@ module.exports = class extends Generator {
     modifyDestFile("src/components/Navbar.vue", navbar => {
 
       //check navbar content to avoid duplicate entries
-      if(utils.wordInText(templateData.serviceNamePascalCase, navbar)){
+      if(utils.wordInText(templateData.serviceNameTitleCase, navbar)){
         return;
       }
       
