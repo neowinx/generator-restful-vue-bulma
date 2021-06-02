@@ -14,6 +14,11 @@ export default {
         return date.split('T')[0]
       return date
     },
+    dateTimeFmt(date) {
+      if (date)
+        return date.replace(/T/,' ');
+      return date
+    },
     currencyFmt(number) {
       if (number)
         return accounting.formatMoney(number, {
