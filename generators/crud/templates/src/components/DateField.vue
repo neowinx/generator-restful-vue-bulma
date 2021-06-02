@@ -2,9 +2,22 @@
   .field.column
     label.label {{ label }}
     .control
-      input.input(v-if='disabled' :value="value" :disabled="disabled")
-      v-date-picker(v-else locale="es" :value="value ? new Date(value) : null" @input="kore" :masks="{ L: 'YYYY-MM-DD' }")
-
+      input.input(v-if="disabled", :value="value", :disabled="disabled")
+      v-date-picker(
+        v-else,
+        :mode="mode",
+        :value="value",
+        @input="$emit('input', $event)",
+        :popover="popover",
+        :model-config="modelConfig",
+        :masks="masks"
+      )
+        template(v-slot="{ inputValue, inputEvents }")
+          input.input(
+            :value="inputValue",
+            v-on="inputEvents",
+            :disabled="disabled"
+          )
 </template>
 <script>
   import InputField from "../components/InputField";
@@ -15,14 +28,31 @@
     props: {
       type: {
         type: String,
-        default: 'date'
-      }
+        default: "date",
+      },
+      disabled: Boolean,
+      mode: String,
     },
     methods: {
-      kore: function ($event) {
-        let formatted = $event.toISOString().split('T')[0]
-        this.$emit('input', `${formatted}`)
-      }
-    }
-  }
+      focus() {},
+    },
+    computed: {
+      popover() {
+        return { visibility: this.disabled ? "hidden" : "hover-focus" };
+      },
+    },
+    data() {
+      return {
+        masks: {
+          input: "YYYY-MM-DD",
+          inputDateTime: "YYYY-MM-DD HH:MM",
+          inputDateTime24hr: "YYYY-MM-DD HH:MM",
+        },
+        modelConfig: {
+          type: "string",
+          mask: this.mode === "dateTime" ? "YYYY-MM-DDTHH:MM:SS" : "YYYY-MM-DD",
+        },
+      };
+    },
+  };
 </script>
