@@ -45,12 +45,12 @@
       return {
         masks: {
           input: "YYYY-MM-DD",
-          inputDateTime: "YYYY-MM-DD HH:MM",
-          inputDateTime24hr: "YYYY-MM-DD HH:MM",
+          inputDateTime: "YYYY-MM-DD HH:mm",
+          inputDateTime24hr: "YYYY-MM-DD HH:mm",
         },
         modelConfig: {
           type: "string",
-          mask: this.mode === "dateTime" ? "YYYY-MM-DDTHH:MM:SS" : "YYYY-MM-DD",
+          mask: this.mode === "dateTime" ? "YYYY-MM-DDTHH:mm:ss" : "YYYY-MM-DD",
         },
       };
     },
