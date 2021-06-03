@@ -42,7 +42,7 @@ Therefore, the crud sub-generator requires the following information:
 
 It is worth mentioning that code customization can be achieved through config files related to each service endpoint. These files, called internally as **meta json**, contain configurations that modify how code is generated, such as what fields are available to edit or how data is displayed based on the data type. 
 
-Each meta json config file has to be named as _serviceName_.meta.json and located in the same directory where the sub-generator is executed; this way, the sub-generator will recognize them and apply the changes. 
+The configuration file is optional. If a path is not provided, the sub-generator will search for a file named as _serviceName_.meta.json.
 
 The list of available options for customization are:
 
