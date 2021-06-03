@@ -61,6 +61,8 @@ _%>
             <%_ } else { -%>
               <%_if(meta && meta.date_fields && meta.date_fields.includes(e)) {-%>
             td {{ row.<%= e %>  | dateFmt }}
+              <%_ } else if(meta && meta.datetime_fields && meta.datetime_fields.includes(e)) {-%>
+            td {{ row.<%= e %>  | dateTimeFmt }}
               <%_ } else { -%>
             td {{ row.<%= e %> }}
               <%_ } -%>
@@ -117,7 +119,9 @@ _%>
             <%_ } -%>
           <%_ } else { -%>
             <%_if(meta && meta.date_fields && meta.date_fields.includes(e)) {-%>
-            DateField(label='<%= fieldTitle %>' v-model='<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
+            DateField(label='<%= fieldTitle %>' mode="date" v-model='<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
+            <%_} else if(meta && meta.datetime_fields && meta.datetime_fields.includes(e)) {-%>
+            DateField(label='<%= fieldTitle %>' mode="dateTime" v-model='<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
             <%_} else if(meta && meta.image_fields && meta.image_fields.includes(e)) {-%>
             ImageUploadField(label='<%= fieldTitle %>' v-model='<%= collection %>Instance.<%=e%>'<%_lastParams(e, index)-%>)
             <%_ } else { -%>

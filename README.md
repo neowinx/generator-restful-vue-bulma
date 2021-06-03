@@ -50,7 +50,8 @@ The list of available options for customization are:
 - **no_edit**(*array*):  list of attribute names that determined if a field, related to an attribute name, is included or not in create/update forms.
 - **search**(*array*): list of attribute names used to generate search fields.
 - **currency_fields**(*array*):  list of attribute names that contain currency values. Used to generate Currency Fields and apply a Currency format.
-- **date_fields**(*array*): list of attribute names that contain date values. Used to generate Date Fields and apply a Date format. 
+- **date_fields**(*array*): list of attribute names that contain date values. Used to generate Date Fields and apply a Date format.
+- **datetime_fields**(*array*): list of attribute names that contain datetime values. Used to generate DateTime Fields and apply a DateTime format. 
 - **image_fields**(*array*): list of attribute names that contain image values. Used to generate Image Upload Fields.
 - **titles**(*dict*): dictionary used to customize the text of table headers and field labels. The key is an attribute name and the value es the custom text.
 - **max_length**(*dict*): dictionary used to set the max length of characters that a field can contain. The key is an attribute name and the value es the max length.
